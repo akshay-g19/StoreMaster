@@ -26,6 +26,7 @@ management:
       show-components: always
 logging:
   level:
+    root: INFO
     org:
       hibernate:
         SQL: DEBUG
@@ -33,3 +34,6 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+
+server:
+  port: 8080

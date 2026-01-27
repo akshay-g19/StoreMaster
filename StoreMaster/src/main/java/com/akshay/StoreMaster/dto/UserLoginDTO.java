@@ -6,13 +6,17 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
-@Data
-public class UserLoginDTO {
+//@Getter
+//@Setter
+//@Data
+//public class UserLoginDTO {
+//
+//    @Email
+//    private String email;
+//    @NotBlank
+//    private String password;
+//}
 
-    @Email
-    private String email;
-    @NotBlank
-    private String password;
+public record UserLoginDTO ( String email, String password) {
+
 }

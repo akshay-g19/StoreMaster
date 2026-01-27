@@ -21,8 +21,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class ProductService {
-    @Autowired
-    private ProductRepository productRepository;
+
+    private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     //This method validates product input, saves the product to the database, and returns the saved product details as a response DTO
     public List<ProductResponseDTO> addProduct(List<ProductRequestDTO> dtoList) {
