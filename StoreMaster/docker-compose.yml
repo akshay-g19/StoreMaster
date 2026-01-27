@@ -1,0 +1,38 @@
+version: "1.0"
+
+services:
+  app:
+    build: .
+    image: store-master:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/storemaster_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=Postgres@1997
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+      - SPRING_APPLICATION_NAME=StoreMaster
+      - MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=health,info,metrics
+      - MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS=always
+      - MANAGEMENT_ENDPOINT_HEALTH_SHOW_COMPONENTS=always
+      - LOGGING_LEVEL_ROOT=INFO
+      - LOGGING_LEVEL_ORG_HIBERNATE_SQL=DEBUG
+      - LOGGING_LEVEL_ORG_HIBERNATE_TYPE_DESCRIPTOR_SQL_BASICBINDER=TRACE
+    depends_on:
+      - db
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=storemaster_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Postgres@1997
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/app/data
+      - db_data:/var/lib/postgresql/data
+volumes:
+  db_data:

@@ -1,5 +1,6 @@
 package com.akshay.StoreMaster.service;
 
+import com.akshay.StoreMaster.dto.EmailRequest;
 import com.akshay.StoreMaster.dto.UserLoginDTO;
 import com.akshay.StoreMaster.dto.UserRegistrationDTO;
 import com.akshay.StoreMaster.dto.UserResponseDTO;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 
@@ -21,6 +23,9 @@ public class UserService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     public UserResponseDTO registerUser(UserRegistrationDTO userRegistrationDTO) {
         User user = new User();
@@ -36,6 +41,10 @@ public class UserService {
             user.setCreatedAt(LocalDateTime.now());
             User savedUser = userRepository.save(user);
 
+//            String emailServiceUrl = "http://localhost:8081/api/email/send";
+//            EmailRequest emailRequest = new EmailRequest(savedUser.getEmail(), "Welcome! to store master", "Thank you for registering.");
+//            restTemplate.postForEntity(emailServiceUrl, emailRequest, Void.class);
+
             UserResponseDTO responseDTO = new UserResponseDTO();
             responseDTO.setId(savedUser.getId());
             responseDTO.setName(savedUser.getName());
@@ -45,11 +54,11 @@ public class UserService {
         }
     }
     public void login(UserLoginDTO userLoginDTO){
-        User checkUser = userRepository.findByEmail(userLoginDTO.getEmail());
+        User checkUser = userRepository.findByEmail(userLoginDTO.email());
         if (checkUser == null){
             throw new InvalidCredentialException("Invalid Credential Email is not valid ");
         }
-        if (!bCryptPasswordEncoder.matches(userLoginDTO.getPassword(), checkUser.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(userLoginDTO.password(), checkUser.getPassword())) {
             throw new InvalidCredentialException("Invalid Credential: Password Mismatch");
         }
     }

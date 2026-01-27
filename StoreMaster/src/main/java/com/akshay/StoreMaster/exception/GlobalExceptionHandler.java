@@ -10,14 +10,22 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<?> handleProductNotFoundException(ProductNotFoundException e){
-        ErrorResponse productNotFound = new ErrorResponse(LocalDateTime.now(), e.getMessage(),e.toString());
+    public ResponseEntity<?> handleProductNotFoundException(ProductNotFoundException e) {
+        ErrorResponse productNotFound = new ErrorResponse(
+                LocalDateTime.now(),
+                e.getMessage(),
+                e.toString()
+        );
         return new ResponseEntity<>(productNotFound, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(InvalidCredentialException.class)
-    public ResponseEntity<?> handleInvalidCredentialException(InvalidCredentialException e){
-        ErrorResponse invalidCredential = new ErrorResponse(LocalDateTime.now(),e.getMessage(),e.toString());
+    public ResponseEntity<?> handleInvalidCredentialException(InvalidCredentialException e) {
+        ErrorResponse invalidCredential = new ErrorResponse(
+                LocalDateTime.now(),
+                e.getMessage(),
+                e.toString()
+        );
         return new ResponseEntity<>(invalidCredential, HttpStatus.UNAUTHORIZED);
     }
 }

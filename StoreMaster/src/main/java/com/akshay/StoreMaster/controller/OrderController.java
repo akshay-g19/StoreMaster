@@ -14,8 +14,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/storeMaster/orders")
 public class OrderController {
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @PostMapping("/place")
     public ResponseEntity<OrderResponseDTO> placeOrder(@RequestParam Long userId){

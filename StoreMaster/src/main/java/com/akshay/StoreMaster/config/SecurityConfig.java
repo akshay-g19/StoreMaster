@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.stereotype.Component;
 
 @Configuration
 @EnableWebSecurity
@@ -19,9 +20,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/storeMaster/**","/actuator/health").permitAll() // Allow public access to /public
-//                        .requestMatchers("/storeMaster/product/add","/storeMaster/product/update/**","storeMaster/product/delete/**").hasRole("ADMIN")
-                        .anyRequest().authenticated() // Require authentication for all other requests
+                        .requestMatchers("/storeMaster/user/**","/actuator/health").permitAll()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .logout(LogoutConfigurer::permitAll);
