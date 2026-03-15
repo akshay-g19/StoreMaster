@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/storemaster_db
     username: postgres
-    password: Postgres@1997
+    password: Postgrespw
   jpa:
     hibernate:
       ddl-auto: update
