@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDateTime;
 @RestControllerAdvice
@@ -27,5 +28,30 @@ public class GlobalExceptionHandler {
                 e.toString()
         );
         return new ResponseEntity<>(invalidCredential, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<?> handleUserAlreadyExistException(UserAlreadyExistException e) {
+        ErrorResponse userExists = new ErrorResponse(
+                LocalDateTime.now(),
+                e.getMessage(),
+                e.toString()
+        );
+        return new ResponseEntity<>(userExists, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException e) {
+        String errorMessage = e.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .reduce((e1, e2) -> e1 + ", " + e2)
+                .orElse("Validation failed");
+
+        ErrorResponse validationError = new ErrorResponse(
+                LocalDateTime.now(),
+                errorMessage,
+                e.toString()
+        );
+        return new ResponseEntity<>(validationError, HttpStatus.BAD_REQUEST);
     }
 }
