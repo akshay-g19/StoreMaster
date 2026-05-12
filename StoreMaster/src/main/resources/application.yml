@@ -1,4 +1,8 @@
 spring:
+  docker:
+    compose:
+      enabled: true
+      file: docker-compose.yml
   datasource:
     url: jdbc:postgresql://localhost:5433/storemaster_db
     username: postgres
@@ -36,6 +40,5 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
-
 server:
   port: 8080

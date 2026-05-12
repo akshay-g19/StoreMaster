@@ -53,23 +53,23 @@ public class OrderServiceImpl implements OrderService{
 
         List<OrderItem> orderItems = cart.getCartItemList().stream()
                 .map(cartItem -> {
-                    Product product = productRepository.findById(cartItem.getProduct().getProduct_Id())
+                    Product product = productRepository.findById(cartItem.getProduct().getId())
                             .orElseThrow(() -> new ProductNotFoundException(
-                            String.format("Product Not found: ID=%d" , cartItem.getProduct().getProduct_Id())));
+                            String.format("Product Not found: ID=%d" , cartItem.getProduct().getId())));
                     log.info("Processing productId={} name={} requestedQty={} availableQty={}",
-                            product.getProduct_Id(), product.getName(), cartItem.getQuantity(), product.getStock_quantity());
+                            product.getId(), product.getName(), cartItem.getQuantity(), product.getStockQuantity());
 
-                    if (product.getStock_quantity() < cartItem.getQuantity()){
+                    if (product.getStockQuantity() < cartItem.getQuantity()){
                         log.info("Insufficient stock for productId={} name={} requested={} available={}",
-                                product.getProduct_Id(), product.getName(), cartItem.getQuantity(), product.getStock_quantity());
+                                product.getId(), product.getName(), cartItem.getQuantity(), product.getStockQuantity());
                         throw new RuntimeException("Insufficient stock for product" + product.getName());
                     }
-                    product.setStock_quantity(product.getStock_quantity() - cartItem.getQuantity());
+                    product.setStockQuantity(product.getStockQuantity() - cartItem.getQuantity());
                     productRepository.save(product);
-                    log.info("Reduced stock for productId={} newQty={}", product.getProduct_Id(), product.getStock_quantity());
+                    log.info("Reduced stock for productId={} newQty={}", product.getId(), product.getStockQuantity());
 
                     OrderItem item =  new OrderItem();
-                    item.setProductId(cartItem.getProduct().getProduct_Id());
+                    item.setProductId(cartItem.getProduct().getId());
                     item.setQuantity(cartItem.getQuantity());
                     item.setPrice(product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
                     item.setOrder(order);

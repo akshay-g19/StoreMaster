@@ -6,14 +6,11 @@ import com.akshay.StoreMaster.entity.Product;
 import com.akshay.StoreMaster.exception.ProductNotFoundException;
 import com.akshay.StoreMaster.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,18 +41,18 @@ public class ProductService {
                 product.setName(productRequestDTO.getName());
                 product.setPrice(productRequestDTO.getPrice());
                 product.setDescription(productRequestDTO.getDescription());
-                product.setStock_quantity(productRequestDTO.getStock_quantity());
+                product.setStockQuantity(productRequestDTO.getStock_quantity());
                 product.setCategory(productRequestDTO.getCategory());
-                product.setCreated_at(LocalDateTime.now());
+                product.setCreatedAt(LocalDateTime.now());
                 Product savedProduct = productRepository.save(product);
 
                 ProductResponseDTO responseDTO = new ProductResponseDTO();
-                responseDTO.setProduct_ID(savedProduct.getProduct_Id());
+                responseDTO.setProduct_ID(savedProduct.getId());
                 responseDTO.setName(savedProduct.getName());
                 responseDTO.setPrice(savedProduct.getPrice());
                 responseDTO.setDescription(savedProduct.getDescription());
                 responseDTO.setCategory(savedProduct.getCategory());
-                responseDTO.setStock_quantity(savedProduct.getStock_quantity());
+                responseDTO.setStock_quantity(savedProduct.getStockQuantity());
                 listOfProductsToAdd.add(responseDTO);
         }
         return listOfProductsToAdd;
@@ -80,22 +77,22 @@ public class ProductService {
             product.setDescription(productRequestDTO.getDescription());
         }
         if (productRequestDTO.getStock_quantity() >= 0) {
-            product.setStock_quantity(productRequestDTO.getStock_quantity());
+            product.setStockQuantity(productRequestDTO.getStock_quantity());
         }
         if (productRequestDTO.getCategory() != null) {
             product.setCategory(productRequestDTO.getCategory());
         }
-        product.setCreated_at(LocalDateTime.now());
+        product.setCreatedAt(LocalDateTime.now());
 
         Product savedProduct = productRepository.save(product);
 
         ProductResponseDTO responseDTO = new ProductResponseDTO();
-        responseDTO.setProduct_ID(savedProduct.getProduct_Id());
+        responseDTO.setProduct_ID(savedProduct.getId());
         responseDTO.setName(savedProduct.getName());
         responseDTO.setPrice(savedProduct.getPrice());
         responseDTO.setDescription(savedProduct.getDescription());
         responseDTO.setCategory(savedProduct.getCategory());
-        responseDTO.setStock_quantity(savedProduct.getStock_quantity());
+        responseDTO.setStock_quantity(savedProduct.getStockQuantity());
         return responseDTO;
     }
 
@@ -115,12 +112,12 @@ public class ProductService {
 
             ProductResponseDTO responseDTO = new ProductResponseDTO();
 
-            responseDTO.setProduct_ID(product.getProduct_Id());
+            responseDTO.setProduct_ID(product.getId());
             responseDTO.setPrice(product.getPrice());
-            responseDTO.setStock_quantity(product.getStock_quantity());
+            responseDTO.setStock_quantity(product.getStockQuantity());
             responseDTO.setName(product.getName());
             responseDTO.setDescription(product.getDescription());
-            responseDTO.setStock_quantity(product.getStock_quantity());
+            responseDTO.setStock_quantity(product.getStockQuantity());
             responseDTO.setCategory(product.getCategory());
             return responseDTO;
         }).collect(Collectors.toList());
@@ -136,12 +133,12 @@ public class ProductService {
 
        Product foundProduct = product.get();
        ProductResponseDTO responseDTO = new ProductResponseDTO();
-        responseDTO.setProduct_ID(foundProduct.getProduct_Id());
+        responseDTO.setProduct_ID(foundProduct.getId());
         responseDTO.setName(foundProduct.getName());
         responseDTO.setPrice(foundProduct.getPrice());
         responseDTO.setDescription(foundProduct.getDescription());
         responseDTO.setCategory(foundProduct.getCategory());
-        responseDTO.setStock_quantity(foundProduct.getStock_quantity());
+        responseDTO.setStock_quantity(foundProduct.getStockQuantity());
         return responseDTO;
     }
 }

@@ -39,7 +39,7 @@ public class CartService {
         log.info("Received addCart request: userId: {}, productId: {}, quantity: {}", addCartDTO.getUserId(), addCartDTO.getProductId(), addCartDTO.getQuantity());
 
         Product product = productRepository.findById(addCartDTO.getProductId()).orElseThrow(() -> new RuntimeException("Product not found with ID: " + addCartDTO.getProductId()));
-        log.info("Fetched Product: id: {}, name: {}, price: {}", product.getProduct_Id(), product.getName(), product.getPrice());
+        log.info("Fetched Product: id: {}, name: {}, price: {}", product.getId(), product.getName(), product.getPrice());
 
         User user = userRepository.findById(addCartDTO.getUserId()).orElseThrow(() -> new RuntimeException("User not found with ID " + addCartDTO.getUserId()));
         log.info("Fetched User: id:{}", user.getId());
@@ -57,14 +57,14 @@ public class CartService {
             log.info("Existing cart found: cartId: {}", cart.getId());
         }
 
-        Optional<CartItem> existingItem = cart.getCartItemList().stream().filter(item -> item.getProduct().getProduct_Id().equals(addCartDTO.getProductId())).findFirst();
+        Optional<CartItem> existingItem = cart.getCartItemList().stream().filter(item -> item.getProduct().getId().equals(addCartDTO.getProductId())).findFirst();
 
         if (existingItem.isPresent()) {
             CartItem item = existingItem.get();
             log.info("Product already in cart. Updating quantity. Old quantity: {}, adding: {}", item.getQuantity(), addCartDTO.getQuantity());
             item.setQuantity(item.getQuantity() + addCartDTO.getQuantity());
             item.setPrice(product.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
-            log.info("Updated CartItem: productId: {}, quantity: {}, price: {}", item.getProduct().getProduct_Id(), item.getQuantity(), item.getPrice());
+            log.info("Updated CartItem: productId: {}, quantity: {}, price: {}", item.getProduct().getId(), item.getQuantity(), item.getPrice());
             cartItemRepository.save(item);
         } else {
             CartItem newItem = new CartItem();
@@ -75,10 +75,10 @@ public class CartService {
             log.info("item prize: {}", newItem.getPrice());
             newItem.setCart(cart);
             cart.getCartItemList().add(newItem);
-            log.info("Added new CartItem: productId:{}, quantity:{}, price:{}", product.getProduct_Id(), addCartDTO.getQuantity(), newItem.getPrice());
+            log.info("Added new CartItem: productId:{}, quantity:{}, price:{}", product.getId(), addCartDTO.getQuantity(), newItem.getPrice());
         }
         for (CartItem item : cart.getCartItemList()) {
-            log.info("CartItem - Product ID: {}, Name: {}, Quantity: {}, Price: {}", item.getProduct().getProduct_Id(), item.getProduct().getName(), item.getQuantity(), item.getPrice());
+            log.info("CartItem - Product ID: {}, Name: {}, Quantity: {}, Price: {}", item.getProduct().getId(), item.getProduct().getName(), item.getQuantity(), item.getPrice());
         }
 
         BigDecimal total = cart.getCartItemList().stream().
@@ -104,7 +104,7 @@ public class CartService {
 //        }
 
         List<CartItemDTO> cartItems = cart.getCartItemList().stream()
-                .map(item -> new CartItemDTO(item.getProduct().getProduct_Id(), item.getProduct().getName(), item.getQuantity(), item.getProduct().getPrice()))
+                .map(item -> new CartItemDTO(item.getProduct().getId(), item.getProduct().getName(), item.getQuantity(), item.getProduct().getPrice()))
                 .collect(Collectors.toList());
 
 //        for (CartItemDTO item: cartItems) {
@@ -121,7 +121,7 @@ public class CartService {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found"));
 
         Optional<CartItem> itemToRemove = cart.getCartItemList().stream()
-                .filter(item -> item.getProduct().getProduct_Id().equals(productId))
+                .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst();
 
         if (itemToRemove.isEmpty()) {
