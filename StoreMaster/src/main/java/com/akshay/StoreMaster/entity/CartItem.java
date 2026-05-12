@@ -13,13 +13,13 @@ import java.math.BigDecimal;
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long cartItem_id;
+    private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    private int quantity;
+    private Integer quantity;
 
     private BigDecimal price;
 

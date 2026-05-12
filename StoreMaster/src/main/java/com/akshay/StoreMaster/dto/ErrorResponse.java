@@ -1,4 +1,4 @@
-package com.akshay.StoreMaster.entity;
+package com.akshay.StoreMaster.dto;
 
 import lombok.Getter;
 import lombok.Setter;

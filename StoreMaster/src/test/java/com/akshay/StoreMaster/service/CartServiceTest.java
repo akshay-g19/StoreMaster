@@ -45,7 +45,7 @@ public class CartServiceTest {
         addCartDTO.setQuantity(2);
 
         Product product = new Product();
-        product.setProduct_Id(100L);
+        product.setId(100L);
         product.setPrice(BigDecimal.valueOf(50));
 
         User user = new User();

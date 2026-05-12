@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Table(name = "products")
 public class Product {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long product_Id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 
@@ -23,9 +23,9 @@ public class Product {
 
     private BigDecimal price;
 
-    private int stock_quantity;
+    private Integer stockQuantity;
 
     private String category;
 
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 }
