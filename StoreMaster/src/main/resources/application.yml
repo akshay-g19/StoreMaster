@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/storemaster_db
+    url: jdbc:postgresql://localhost:5433/storemaster_db
     username: postgres
     password: Postgrespw
   jpa:
@@ -12,6 +12,8 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        JDBC:
+          time_zone: Asia/Kolkata
   application:
     name: StoreMaster
 
