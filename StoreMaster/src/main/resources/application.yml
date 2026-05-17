@@ -32,6 +32,7 @@ management:
       show-components: always
 logging:
   level:
+    org.springframework: DEBUG
     root: INFO
     org:
       hibernate:

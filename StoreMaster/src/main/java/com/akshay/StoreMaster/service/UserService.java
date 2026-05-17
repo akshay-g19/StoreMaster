@@ -6,6 +6,7 @@ import com.akshay.StoreMaster.dto.UserRegistrationDTO;
 import com.akshay.StoreMaster.dto.UserResponseDTO;
 import com.akshay.StoreMaster.entity.User;
 import com.akshay.StoreMaster.exception.InvalidCredentialException;
+import com.akshay.StoreMaster.exception.UserAlreadyExistException;
 import com.akshay.StoreMaster.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,11 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     public UserResponseDTO registerUser(UserRegistrationDTO userRegistrationDTO) {
         User user = new User();
         User existingUser = userRepository.findByEmail(userRegistrationDTO.getEmail());
         if (existingUser != null) {
-            throw new IllegalArgumentException("Email already registered");
+            throw new UserAlreadyExistException("Email already registered");
         } else {
             String encryptedPassword = bCryptPasswordEncoder.encode(userRegistrationDTO.getPassword());
             user.setPassword(encryptedPassword);
@@ -40,10 +38,6 @@ public class UserService {
             user.setRole("ROLE_USER");
             user.setCreatedAt(LocalDateTime.now());
             User savedUser = userRepository.save(user);
-
-//            String emailServiceUrl = "http://localhost:8081/api/email/send";
-//            EmailRequest emailRequest = new EmailRequest(savedUser.getEmail(), "Welcome! to store master", "Thank you for registering.");
-//            restTemplate.postForEntity(emailServiceUrl, emailRequest, Void.class);
 
             UserResponseDTO responseDTO = new UserResponseDTO();
             responseDTO.setId(savedUser.getId());
