@@ -16,12 +16,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/storeMaster/user/**").permitAll()
-                        .requestMatchers("/storeMaster/product/**").permitAll()
-                        .requestMatchers("/storeMaster/order/**").permitAll()
-                        .requestMatchers("/storeMaster/cart/**").permitAll()
-                        .requestMatchers("/actuator/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .httpBasic(AbstractHttpConfigurer::disable);
         return http.build();

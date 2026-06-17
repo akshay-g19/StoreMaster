@@ -1,20 +1,17 @@
-# ── Stage 1: Build ──────────────────────────────────────────────
-FROM eclipse-temurin:21-jdk-jammy AS builder
+# ─── Stage 1: Build ───────────────────────────────────────────────
+FROM maven:3.9.14-eclipse-temurin-21 AS builder
 
 WORKDIR /app
 
-# Copy Maven wrapper and pom first (layer cache for dependencies)
-COPY .mvn/ .mvn/
-COPY mvnw pom.xml ./
+# Copy pom.xml first to leverage Docker layer cache for dependencies
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
 
-# Download dependencies (cached unless pom.xml changes)
-RUN ./mvnw dependency:go-offline -B
+# Copy source and run clean package (skipping tests — remove flag if you want them)
+COPY src ./src
+RUN mvn clean package -DskipTests -B
 
-# Copy source and package (skipping tests)
-COPY src/ src/
-RUN ./mvnw package -DskipTests -B
-
-# ── Stage 2: Run ────────────────────────────────────────────────
+# ─── Stage 2: Runtime ─────────────────────────────────────────────
 FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
