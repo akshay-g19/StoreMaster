@@ -1,13 +1,11 @@
 package com.akshay.StoreMaster.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class CartResponseDTO {
     private List<CartItemDTO> items;
     private BigDecimal totalPrice;
