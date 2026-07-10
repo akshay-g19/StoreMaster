@@ -1,3 +1,5 @@
+#I have used to deploy application to aws ec2 with RDS postgres database. Please make sure to set the environment variables in .env file before running this docker-compose file.
+
 services:
   app:
     build: .
