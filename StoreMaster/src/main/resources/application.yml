@@ -47,11 +47,12 @@ management:
       show-components: always
 logging:
   level:
-    org.springframework: DEBUG
     root: INFO
+    org.springframework: INFO
+    org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener: INFO
     org:
       hibernate:
-        SQL: DEBUG
+        SQL: INFO
         type:
           descriptor:
             sql:

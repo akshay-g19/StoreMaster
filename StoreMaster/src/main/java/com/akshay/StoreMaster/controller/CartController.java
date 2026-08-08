@@ -15,21 +15,21 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/add")
-    public String addCart(@RequestBody AddCartDTO addCartDTO) {
+    public ResponseEntity<String> addCart(@RequestBody AddCartDTO addCartDTO) {
         cartService.addCart(addCartDTO);
-        return "Product added to cart successfully";
+        return ResponseEntity.status(HttpStatus.CREATED).body("Product added to cart successfully");
     }
 
     @GetMapping("/view")
     public ResponseEntity<CartResponseDTO> viewCart(@RequestParam Long userId) {
         CartResponseDTO cart = cartService.viewCart(userId);
-        return ResponseEntity.ok(cart);
+        return new ResponseEntity<>(cart, HttpStatus.OK);
     }
 
     @DeleteMapping("/remove/{userId}/{productId}")
     public ResponseEntity<String> removeItem(@PathVariable Long userId, @PathVariable Long productId){
         cartService.removeFromCart(userId,productId);
-        return ResponseEntity.ok("Product removed from cart successfully");
+        return new ResponseEntity<>("Product removed from cart successfully", HttpStatus.OK);
     }
 
     @DeleteMapping("/clear/{userId}")
