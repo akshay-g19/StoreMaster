@@ -20,9 +20,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private ProductRepository productRepository;
-    //This endpoint handles adding a new product by accepting product details, delegating to the service layer, and returning the saved product information.
     @Transactional
     @PostMapping("/add")
     public ResponseEntity<List<ProductResponseDTO>> add(@RequestBody List<ProductRequestDTO> dtoList){
