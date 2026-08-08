@@ -23,11 +23,6 @@ public class UserController{
         this.userService = userService;
     }
 
-    @GetMapping("/health")
-    public ResponseEntity<String> health() {
-        return ResponseEntity.ok("StoreMaster User Service is up and running!");
-    }
-
     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegistrationDTO dto){
         UserResponseDTO created = userService.registerUser(dto);
