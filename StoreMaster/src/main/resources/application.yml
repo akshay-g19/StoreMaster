@@ -48,11 +48,11 @@ management:
 logging:
   level:
     root: INFO
-    org.springframework: DEBUG
+    org.springframework: INFO
     org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener: INFO
     org:
       hibernate:
-        SQL: DEBUG
+        SQL: INFO
         type:
           descriptor:
             sql:
