@@ -14,6 +14,7 @@ import com.akshay.StoreMaster.repository.CartRepository;
 import com.akshay.StoreMaster.repository.ProductRepository;
 import com.akshay.StoreMaster.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,15 +28,16 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CartService {
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CartRepository cartRepository;
-    @Autowired
-    private CartItemRepository cartItemRepository;
+
+    private final ProductRepository productRepository;
+
+    private final UserRepository userRepository;
+
+    private final CartRepository cartRepository;
+
+    private final CartItemRepository cartItemRepository;
 
     @Transactional
     public void addCart(AddCartDTO addCartDTO) {

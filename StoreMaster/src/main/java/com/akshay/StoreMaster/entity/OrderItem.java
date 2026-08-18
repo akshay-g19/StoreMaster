@@ -14,7 +14,7 @@ public class OrderItem {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
