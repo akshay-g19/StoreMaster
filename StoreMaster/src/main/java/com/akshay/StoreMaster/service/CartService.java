@@ -7,13 +7,17 @@ import com.akshay.StoreMaster.entity.Cart;
 import com.akshay.StoreMaster.entity.CartItem;
 import com.akshay.StoreMaster.entity.Product;
 import com.akshay.StoreMaster.entity.User;
+import com.akshay.StoreMaster.exception.CartNotFoundException;
+import com.akshay.StoreMaster.exception.ProductNotFoundException;
 import com.akshay.StoreMaster.repository.CartItemRepository;
 import com.akshay.StoreMaster.repository.CartRepository;
 import com.akshay.StoreMaster.repository.ProductRepository;
 import com.akshay.StoreMaster.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,24 +28,31 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CartService {
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CartRepository cartRepository;
-    @Autowired
-    private CartItemRepository cartItemRepository;
+
+    private final ProductRepository productRepository;
+
+    private final UserRepository userRepository;
+
+    private final CartRepository cartRepository;
+
+    private final CartItemRepository cartItemRepository;
 
     @Transactional
     public void addCart(AddCartDTO addCartDTO) {
-        log.info("Received addCart request: userId: {}, productId: {}, quantity: {}", addCartDTO.getUserId(), addCartDTO.getProductId(), addCartDTO.getQuantity());
+        log.info("Received addCart request for user: {}", addCartDTO.getUserId());
 
-        Product product = productRepository.findById(addCartDTO.getProductId()).orElseThrow(() -> new RuntimeException("Product not found with ID: " + addCartDTO.getProductId()));
+        Product product = productRepository.findById(addCartDTO.getProductId())
+                .orElseThrow(() ->
+                        new ProductNotFoundException("Product not found with ID: " + addCartDTO.getProductId()));
+
         log.info("Fetched Product: id: {}, name: {}, price: {}", product.getId(), product.getName(), product.getPrice());
 
-        User user = userRepository.findById(addCartDTO.getUserId()).orElseThrow(() -> new RuntimeException("User not found with ID " + addCartDTO.getUserId()));
+        User user = userRepository.findById(addCartDTO.getUserId())
+                .orElseThrow(() ->
+                        new RuntimeException("User not found with ID " + addCartDTO.getUserId()));
+
         log.info("Fetched User: id:{}", user.getId());
 
         // Check if the user already has a cart
@@ -57,7 +68,12 @@ public class CartService {
             log.info("Existing cart found: cartId: {}", cart.getId());
         }
 
-        Optional<CartItem> existingItem = cart.getCartItemList().stream().filter(item -> item.getProduct().getId().equals(addCartDTO.getProductId())).findFirst();
+        Optional<CartItem> existingItem = cart.getCartItemList().stream()
+                .filter(
+                        item -> item.getProduct().getId()
+                                .equals(addCartDTO.getProductId())
+                )
+                .findFirst();
 
         if (existingItem.isPresent()) {
             CartItem item = existingItem.get();
@@ -93,27 +109,17 @@ public class CartService {
 
     @Transactional
     public CartResponseDTO viewCart(Long userId) {
-        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found for user with ID: " + userId));
-
-//        for (CartItem item : cart.getCartItemList()) {
-//            log.info("CartItem - Product ID: {}, Name: {}, Quantity: {}, Price: {}",
-//                    item.getProduct().getProduct_Id(),
-//                    item.getProduct().getName(),
-//                    item.getQuantity(),
-//                    item.getPrice());
-//        }
+        Cart cart = cartRepository.findByUserId(userId)
+                .orElseThrow(() -> new CartNotFoundException(
+                        "Cart not found for user with ID: " + userId
+                ));
 
         List<CartItemDTO> cartItems = cart.getCartItemList().stream()
-                .map(item -> new CartItemDTO(item.getProduct().getId(), item.getProduct().getName(), item.getQuantity(), item.getProduct().getPrice()))
-                .collect(Collectors.toList());
+                .map(item -> new CartItemDTO(
+                        item.getProduct().getId(), item.getProduct().getName(),
+                        item.getQuantity(), item.getProduct().getPrice())
+                ).collect(Collectors.toList());
 
-//        for (CartItemDTO item: cartItems) {
-//            log.info("CartItem - Product ID: {}, Name: {}, Quantity: {}, Price: {}",
-//                    item.getProductId(),
-//                    item.getProductName(),
-//                    item.getQuantity(),
-//                    item.getPrice());
-//        }
         return new CartResponseDTO(cartItems, cart.getTotalPrice());
     }
     @Transactional

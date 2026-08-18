@@ -5,6 +5,7 @@ import com.akshay.StoreMaster.dto.UserRegistrationDTO;
 import com.akshay.StoreMaster.dto.UserResponseDTO;
 import com.akshay.StoreMaster.service.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,21 +13,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 
+@RequiredArgsConstructor
 @Slf4j
 @RestController
 @RequestMapping("/api/v1")
 public class UserController{
 
     private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @GetMapping("/health")
-    public ResponseEntity<String> health() {
-        return ResponseEntity.ok("StoreMaster User Service is up and running!");
-    }
 
     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegistrationDTO dto){

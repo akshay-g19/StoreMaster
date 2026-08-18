@@ -1,24 +1,21 @@
 package com.akshay.StoreMaster.controller;
 
 import com.akshay.StoreMaster.Constants.OrderStatus;
-import com.akshay.StoreMaster.dto.OrderItemResponseDTO;
 import com.akshay.StoreMaster.dto.OrderResponseDTO;
-import com.akshay.StoreMaster.entity.Order;
 import com.akshay.StoreMaster.service.OrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/storeMaster/orders")
+@RequestMapping("/storemaster/orders")
 public class OrderController {
-    private final OrderService orderService;
 
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    private final OrderService orderService;
 
     @PostMapping("/place")
     public ResponseEntity<OrderResponseDTO> placeOrder(@RequestParam Long userId){
