@@ -23,7 +23,6 @@ spring:
 management:
   endpoints:
     health:
-      show-details: always
       show-components: always
     web:
       exposure:
