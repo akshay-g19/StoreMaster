@@ -4,7 +4,6 @@ import com.akshay.StoreMaster.Constants.OrderStatus;
 import com.akshay.StoreMaster.dto.OrderResponseDTO;
 import com.akshay.StoreMaster.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
