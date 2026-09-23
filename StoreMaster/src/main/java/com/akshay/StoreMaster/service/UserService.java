@@ -11,6 +11,7 @@ import com.akshay.StoreMaster.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -28,31 +29,30 @@ public class UserService {
 
     public UserResponseDTO registerUser(UserRegistrationDTO userRegistrationDTO) {
         User user = new User();
-        User existingUser = userRepository.findByEmail(userRegistrationDTO.getEmail());
-        if (existingUser != null) {
-            throw new UserAlreadyExistException("Email already registered");
-        } else {
-            String encryptedPassword = bCryptPasswordEncoder.encode(userRegistrationDTO.getPassword());
-            user.setPassword(encryptedPassword);
-            user.setName(userRegistrationDTO.getName());
-            user.setEmail(userRegistrationDTO.getEmail());
-            user.setRole("ROLE_USER");
-            user.setCreatedAt(LocalDateTime.now());
-            User savedUser = userRepository.save(user);
+        User existingUser = userRepository.findByEmail(userRegistrationDTO.getEmail()).orElseThrow(() ->
+                new UserAlreadyExistException("Email already registered")
+        );
 
-            UserResponseDTO responseDTO = new UserResponseDTO();
-            responseDTO.setId(savedUser.getId());
-            responseDTO.setName(savedUser.getName());
-            responseDTO.setRole(savedUser.getRole());
-            responseDTO.setEmail(savedUser.getEmail());
-            return responseDTO;
-        }
+        String encryptedPassword = bCryptPasswordEncoder.encode(userRegistrationDTO.getPassword());
+        user.setPassword(encryptedPassword);
+        user.setName(userRegistrationDTO.getName());
+        user.setEmail(userRegistrationDTO.getEmail());
+        user.setRole("ROLE_USER");
+        user.setCreatedAt(LocalDateTime.now());
+        User savedUser = userRepository.save(user);
+
+        UserResponseDTO responseDTO = new UserResponseDTO();
+        responseDTO.setId(savedUser.getId());
+        responseDTO.setName(savedUser.getName());
+        responseDTO.setRole(savedUser.getRole());
+        responseDTO.setEmail(savedUser.getEmail());
+        return responseDTO;
     }
-    public void login(UserLoginDTO userLoginDTO){
-        User checkUser = userRepository.findByEmail(userLoginDTO.email());
-        if (checkUser == null){
-            throw new InvalidCredentialException("Invalid Credential Email is not valid ");
-        }
+
+    public void login(UserLoginDTO userLoginDTO) {
+        User checkUser = userRepository.findByEmail(userLoginDTO.email()).orElseThrow(() ->
+                new UsernameNotFoundException("Invalid Credential Email is not valid"));
+
         if (!bCryptPasswordEncoder.matches(userLoginDTO.password(), checkUser.getPassword())) {
             throw new InvalidCredentialException("Invalid Credential: Password Mismatch");
         }
