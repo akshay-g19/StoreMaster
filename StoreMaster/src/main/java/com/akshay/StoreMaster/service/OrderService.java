@@ -9,7 +9,10 @@ import java.util.List;
 @Service
 public interface OrderService {
     OrderResponseDTO placeOrder(Long userId);
+
     OrderResponseDTO updateOrderStatus(Long uerId, OrderStatus orderStatus);
+
     List<OrderResponseDTO> getMyOrders(Long orderId);
+
     List<OrderResponseDTO> getAllOrders();
 }

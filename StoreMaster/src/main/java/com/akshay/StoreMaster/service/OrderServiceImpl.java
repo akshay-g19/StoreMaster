@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService{
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
         log.info("Cart retrieved for userId={} with {} items", userId, cart.getCartItemList().size());
 
-        if (cart.getCartItemList().isEmpty()){
+        if (cart.getCartItemList().isEmpty()) {
             log.info("Cart is empty for userId={}", userId);
             throw new RuntimeException("Cart is Empty");
         }
@@ -55,11 +55,11 @@ public class OrderServiceImpl implements OrderService{
                 .map(cartItem -> {
                     Product product = productRepository.findById(cartItem.getProduct().getId())
                             .orElseThrow(() -> new ProductNotFoundException(
-                            String.format("Product Not found: ID=%d" , cartItem.getProduct().getId())));
+                                    String.format("Product Not found: ID=%d", cartItem.getProduct().getId())));
                     log.info("Processing productId={} name={} requestedQty={} availableQty={}",
                             product.getId(), product.getName(), cartItem.getQuantity(), product.getStockQuantity());
 
-                    if (product.getStockQuantity() < cartItem.getQuantity()){
+                    if (product.getStockQuantity() < cartItem.getQuantity()) {
                         log.info("Insufficient stock for productId={} name={} requested={} available={}",
                                 product.getId(), product.getName(), cartItem.getQuantity(), product.getStockQuantity());
                         throw new RuntimeException("Insufficient stock for product" + product.getName());
@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService{
                     productRepository.save(product);
                     log.info("Reduced stock for productId={} newQty={}", product.getId(), product.getStockQuantity());
 
-                    OrderItem item =  new OrderItem();
+                    OrderItem item = new OrderItem();
                     item.setProductId(cartItem.getProduct().getId());
                     item.setQuantity(cartItem.getQuantity());
                     item.setPrice(product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
