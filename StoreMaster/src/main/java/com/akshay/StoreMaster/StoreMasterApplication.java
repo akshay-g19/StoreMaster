@@ -14,6 +14,7 @@ public class StoreMasterApplication {
 		TimeZone.setDefault(TimeZone.getTimeZone("Asia/kolkata"));
 		SpringApplication.run(StoreMasterApplication.class, args);
 	}
+
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();

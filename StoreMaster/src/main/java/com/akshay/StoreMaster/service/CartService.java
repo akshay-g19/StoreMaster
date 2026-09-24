@@ -16,8 +16,6 @@ import com.akshay.StoreMaster.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -122,8 +120,9 @@ public class CartService {
 
         return new CartResponseDTO(cartItems, cart.getTotalPrice());
     }
+
     @Transactional
-    public void removeFromCart(long userId, long productId){
+    public void removeFromCart(long userId, long productId) {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found"));
 
         Optional<CartItem> itemToRemove = cart.getCartItemList().stream()
@@ -145,7 +144,7 @@ public class CartService {
     }
 
     @Transactional
-    public void clearCart (Long userId){
+    public void clearCart(Long userId) {
         Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new RuntimeException("Cart not found"));
         cartRepository.delete(cart);
     }

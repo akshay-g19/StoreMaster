@@ -23,33 +23,33 @@ public class ProductController {
 
     @Transactional
     @PostMapping("/add")
-    public ResponseEntity<List<ProductResponseDTO>> add(@Valid @RequestBody List<ProductRequestDTO> dtoList){
+    public ResponseEntity<List<ProductResponseDTO>> add(@Valid @RequestBody List<ProductRequestDTO> dtoList) {
         List<ProductResponseDTO> product = productService.addProduct(dtoList);
         log.info("Product added successfully");
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
     @PutMapping("/update/{productId}")
-    public ResponseEntity<ProductResponseDTO> update(@PathVariable Long productId,@Valid @RequestBody ProductRequestDTO productRequestDTO){
+    public ResponseEntity<ProductResponseDTO> update(@PathVariable Long productId, @Valid @RequestBody ProductRequestDTO productRequestDTO) {
         ProductResponseDTO updateProduct = productService.updateProduct(productId, productRequestDTO);
         log.info("Product updated successfully. Id:{}", productId);
         return ResponseEntity.ok(updateProduct);
     }
 
     @DeleteMapping("/delete/{productId}")
-    public ResponseEntity<String> delete(@PathVariable Long productId){
-         productService.deleteProduct(productId);
-        log.info("Product deleted Successfully ID:{}",productId);
+    public ResponseEntity<String> delete(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+        log.info("Product deleted Successfully ID:{}", productId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/getAllProduct")
-    public List<ProductResponseDTO> getAllProducts(){
+    public List<ProductResponseDTO> getAllProducts() {
         return productService.getAllProducts();
     }
 
     @GetMapping("/get/{productId}")
-    public ProductResponseDTO getProduct(@PathVariable Long productId){
+    public ProductResponseDTO getProduct(@PathVariable Long productId) {
         return productService.getProduct(productId);
     }
 }

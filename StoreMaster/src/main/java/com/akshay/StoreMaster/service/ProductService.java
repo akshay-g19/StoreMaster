@@ -11,9 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -82,7 +80,7 @@ public class ProductService {
                 .toList();
     }
 
-    public ProductResponseDTO getProduct(Long productId){
+    public ProductResponseDTO getProduct(Long productId) {
         return toResponseDTO(getProductOrThrow(productId));
     }
 

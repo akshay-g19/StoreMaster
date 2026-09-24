@@ -17,12 +17,12 @@ import java.net.URI;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1")
-public class UserController{
+public class UserController {
 
     private final UserService userService;
 
     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegistrationDTO dto){
+    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody UserRegistrationDTO dto) {
         UserResponseDTO created = userService.registerUser(dto);
 
         URI location = ServletUriComponentsBuilder
@@ -37,7 +37,7 @@ public class UserController{
     //Future Enhancement: Implement JWT token generation and return token in response for login
     //It will return AuthResponseDTO
     @PostMapping("/auth/login")
-    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO userLoginDTO){
+    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
         userService.login(userLoginDTO);
         return ResponseEntity.ok("Logged in Successfully");
     }
