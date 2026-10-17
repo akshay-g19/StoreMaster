@@ -29,9 +29,9 @@ public class UserService {
 
     public UserResponseDTO registerUser(UserRegistrationDTO userRegistrationDTO) {
         User user = new User();
-        User existingUser = userRepository.findByEmail(userRegistrationDTO.getEmail()).orElseThrow(() ->
-                new UserAlreadyExistException("Email already registered")
-        );
+        userRepository.findByEmail(userRegistrationDTO.getEmail()).ifPresent(existingUser -> {
+            throw new UserAlreadyExistException("Email already registered");
+        });
 
         String encryptedPassword = bCryptPasswordEncoder.encode(userRegistrationDTO.getPassword());
         user.setPassword(encryptedPassword);

@@ -9,15 +9,17 @@ spring:
     password: Postgrespw
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
     open-in-view: false
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        JDBC:
+        jdbc:
           time_zone: Asia/Kolkata
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
   application:
     name: StoreMaster
 management:
