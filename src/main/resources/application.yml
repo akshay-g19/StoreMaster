@@ -28,7 +28,7 @@ management:
       show-components: always
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info
   info:
     app:
       name: StoreMaster
