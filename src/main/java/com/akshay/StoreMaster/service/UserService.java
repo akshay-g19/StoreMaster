@@ -51,7 +51,7 @@ public class UserService {
 
     public void login(UserLoginDTO userLoginDTO) {
         User checkUser = userRepository.findByEmail(userLoginDTO.email()).orElseThrow(() ->
-                new UsernameNotFoundException("Invalid Credential Email is not valid"));
+                new InvalidCredentialException("Invalid Credential Email is not valid"));
 
         if (!bCryptPasswordEncoder.matches(userLoginDTO.password(), checkUser.getPassword())) {
             throw new InvalidCredentialException("Invalid Credential: Password Mismatch");
