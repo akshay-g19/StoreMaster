@@ -15,9 +15,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleProductNotFoundException(ProductNotFoundException e) {
         ErrorResponse productNotFound = new ErrorResponse(
                 LocalDateTime.now(),
+                HttpStatus.NOT_FOUND,
                 e.getMessage(),
-                e.toString()
-        );
+                e.toString());
         return new ResponseEntity<>(productNotFound, HttpStatus.NOT_FOUND);
     }
 
@@ -25,19 +25,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleInvalidCredentialException(InvalidCredentialException e) {
         ErrorResponse invalidCredential = new ErrorResponse(
                 LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST,
                 e.getMessage(),
-                e.toString()
-        );
-        return new ResponseEntity<>(invalidCredential, HttpStatus.UNAUTHORIZED);
+                e.toString());
+        return new ResponseEntity<>(invalidCredential, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserAlreadyExistException.class)
     public ResponseEntity<?> handleUserAlreadyExistException(UserAlreadyExistException e) {
         ErrorResponse userExists = new ErrorResponse(
                 LocalDateTime.now(),
+                HttpStatus.CONFLICT,
                 e.getMessage(),
-                e.toString()
-        );
+                e.toString());
         return new ResponseEntity<>(userExists, HttpStatus.CONFLICT);
     }
 
@@ -50,19 +50,29 @@ public class GlobalExceptionHandler {
 
         ErrorResponse validationError = new ErrorResponse(
                 LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST,
                 errorMessage,
-                e.toString()
-        );
+                e.toString());
         return new ResponseEntity<>(validationError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CartNotFoundException.class)
-    public ResponseEntity<String> handleCartNotFound(CartNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> handleCartNotFound(CartNotFoundException ex) {
+        ErrorResponse cartNotFound = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND,
+                ex.getMessage(),
+                ex.toString());
+        return new ResponseEntity<>(cartNotFound, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<String> handleNotFound(ResourceNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> handleNotFound(ResourceNotFoundException ex) {
+        ErrorResponse resourceNotFound = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND,
+                ex.getMessage(),
+                ex.toString());
+        return new ResponseEntity<>(resourceNotFound, HttpStatus.NOT_FOUND);
     }
 }
