@@ -30,7 +30,8 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long productId, @Valid @RequestBody ProductRequestDTO productRequestDTO) {
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long productId,
+            @Valid @RequestBody ProductRequestDTO productRequestDTO) {
         ProductResponseDTO updateProduct = productService.updateProduct(productId, productRequestDTO);
         log.info("Product updated successfully. Id:{}", productId);
         return ResponseEntity.ok(updateProduct);
@@ -44,12 +45,12 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponseDTO> getAllProducts() {
-        return productService.getAllProducts();
+    public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @GetMapping("/{productId}")
-    public ProductResponseDTO getProduct(@PathVariable Long productId) {
-        return productService.getProduct(productId);
+    public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long productId) {
+        return ResponseEntity.ok(productService.getProduct(productId));
     }
 }

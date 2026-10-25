@@ -35,8 +35,9 @@ public class UserController {
         return ResponseEntity.created(location).body(created);
     }
 
-    //Future Enhancement: Implement JWT token generation and return token in response for login
-    //It will return AuthResponseDTO
+    // Future Enhancement: Implement JWT token generation and return token in
+    // response for login
+    // It will return AuthResponseDTO
     @PostMapping("/auth/login")
     public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO userLoginDTO) {
         userService.login(userLoginDTO);

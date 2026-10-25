@@ -1,12 +1,14 @@
 spring:
-  docker:
-    compose:
-      enabled: true
-      file: docker-compose.yml
   datasource:
     url: jdbc:postgresql://localhost:5432/storemaster_db
     username: postgres
     password: Postgrespw
+    hikari:
+      maximum-pool-size: 10 # Maximum number of connections in the pool default is 10
+      minimum-idle: 5 # Minimum number of idle connections in the pool default is same as maximum-pool-size
+      connection-timeout: 3000 # Connection timeout in milliseconds default is 30000
+      max-lifetime: 1800000 # Maximum lifetime of a connection in milliseconds default is 1800000
+      idle-timeout: 60000 # Idle timeout in milliseconds default is 600000
   jpa:
     hibernate:
       ddl-auto: validate
@@ -24,8 +26,6 @@ spring:
     name: StoreMaster
 management:
   endpoints:
-    health:
-      show-components: always
     web:
       exposure:
         include: health,info
@@ -49,14 +49,12 @@ management:
 logging:
   level:
     root: INFO
-    org.springframework: INFO
-    org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener: INFO
     org:
       hibernate:
         SQL: INFO
         type:
           descriptor:
             sql:
-              BasicBinder: TRACE
+              BasicBinder: INFO
 server:
   port: 8080
